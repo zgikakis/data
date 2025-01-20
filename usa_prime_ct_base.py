@@ -12,7 +12,7 @@ import requests
 import time
 from io import BytesIO
 
-#YYYY-MM-DD for a period less than 1 year
+#YYYY-MM-DD for a period of 1 year or less
 start_date = "2021-01-01"
 end_date = "2021-06-30"
 
