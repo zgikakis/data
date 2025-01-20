@@ -70,7 +70,7 @@ def get_zip(url, request):
     return(file_url)
 
 def download_check(session_object, status_url):
-    for attempt in range(10):
+    for attempt in range(25):
         download_url = session_object.get(status_url)
         if download_url.json()['status'] == 'finished':
             print('the file is ready to be processed, downloading')
