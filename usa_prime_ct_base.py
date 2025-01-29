@@ -2,19 +2,17 @@
 # Generated zip file contains a pipe delimtted text file
 # Specify start_date and end_date in YYYY-MM-DD for a period <= 1 year
 # Smaller time selections will be generated significantly faster than large selections
-# Uses usaspending API endpoint: https://api.usaspending.gov/api/v2/bulk_download/awards/ 
-# Returns a status url to check the status of file creation
-# Returns the file name of the generated zip file
-# Returns a download url for the zip file
+# Uses usaspending API endpoint: https://api.usaspending.gov/api/v2/bulk_download/awards/
+# Returns a status url, filename, and download url
 
 
 import requests
 import time
-from io import BytesIO
+import io
 
-#YYYY-MM-DD for a period of 1 year or less
-start_date = "2021-01-01"
-end_date = "2021-06-30"
+#YYYY-MM-DD for a period less than 1 year
+start_date = "2023-12-01"
+end_date = "2023-12-31"
 
 url = 'https://api.usaspending.gov/api/v2/bulk_download/awards/'
 prime_award_types = ["A","B","C","D","IDV_A","IDV_B","IDV_B_A","IDV_B_B","IDV_B_C","IDV_C","IDV_D","IDV_E"]
@@ -54,7 +52,7 @@ def get_zip(url, request):
         print("the file url for this download is {}".format(file_url))
 
         print('Waiting 5 minutes for this file to be generated')
-        time.sleep(5)
+        time.sleep(300)
 
         # Check status of file creation
         download_check(session_object, status_url)
@@ -67,22 +65,24 @@ def get_zip(url, request):
     else:
         print('Did not receive 200 response from server')
 
-    return(file_url)
+    return(status_url, filename, file_url)
 
 def download_check(session_object, status_url):
-    for attempt in range(25):
+    for attempt in range(10):
         download_url = session_object.get(status_url)
         if download_url.json()['status'] == 'finished':
             print('the file is ready to be processed, downloading')
             break
         else:
             print(download_url.json()['status'])
-            print('file has not finished generating. waiting an additional 5 minutes')
-            time.sleep(300)
+            print('file has not finished generating. waiting an additional 10 minutes')
+            time.sleep(600)
 
     return(200)
 
 
-zip_file = get_zip(url=url, request=request)
+status_url, filename, file_url = get_zip(url=url, request=request)
 
-print('the zip file created is: {}'.format(zip_file))
+print('status_url: {}'.format(status_url))
+print('filename: {}'.format(filename))
+print('file_url: {}'.format(file_url))
