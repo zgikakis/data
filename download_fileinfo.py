@@ -1,6 +1,8 @@
 # 1) Creates a pandas dataframe containing information from a usaspending API bulk download POST request
 # 2) Downloads df to a specified filepath as a csv
 
+import pandas as pd
+
 start_date = "2024-12-01"
 end_date = "2024-12-31"
 status_url = "https://api.usaspending.gov/api/v2/download/status?file_name=All_PrimeTransactions_2025-01-29_H14M09S08664008.zip"
@@ -30,4 +32,4 @@ print(info_df)
 filepath = (folder+infofile)
 print(filepath)
 
-info_df.to_csv(filepath, index=False)
+info_df.to_csv(path_or_buf=filepath, sep=',', header=True, index=False)
