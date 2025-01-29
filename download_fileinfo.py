@@ -10,10 +10,12 @@ filename = "All_PrimeTransactions_2025-01-29_H14M09S08664008.zip"
 file_url = "https://files.usaspending.gov/generated_downloads/All_PrimeTransactions_2025-01-29_H14M09S08664008.zip"
 folder = 'C:\\usa_api_fileinfo\\'
 
+# Create variable to serve as file name for the infofile csv
 infofile = ('prime_ct_{}_{}'.format(start_date, end_date)).replace('-', "")
 
 print(infofile)
 
+# Create dictionary containing respose data from usaspending API POST request
 infodata = {'infofile':[infofile],
             'start_date':[start_date],
             'end_date':[end_date],
@@ -21,6 +23,7 @@ infodata = {'infofile':[infofile],
             'filename':[filename],
             'file_url':[file_url]}
 
+# Create dataframe from infodata dictionary
 info_df = pd.DataFrame(infodata)
 
 # Set option to display all columns and rows
@@ -29,7 +32,9 @@ pd.set_option('display.max_rows', None)
 
 print(info_df)
 
+# Create filepath consisting of folder filepath + filename
 filepath = (folder+infofile)
 print(filepath)
 
+# Download info_df as csv to specified filepath
 info_df.to_csv(path_or_buf=filepath, sep=',', header=True, index=False)
