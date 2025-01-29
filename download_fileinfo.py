@@ -3,8 +3,11 @@
 
 start_date = "2024-12-01"
 end_date = "2024-12-31"
+status_url = "https://api.usaspending.gov/api/v2/download/status?file_name=All_PrimeTransactions_2025-01-29_H14M09S08664008.zip"
+filename = "All_PrimeTransactions_2025-01-29_H14M09S08664008.zip"
+file_url = "https://files.usaspending.gov/generated_downloads/All_PrimeTransactions_2025-01-29_H14M09S08664008.zip"
 
-raw_filename = 'prime_ct_{}_{}'.format(start_date, end_date)
-clean_filename = raw_filename.replace('-', "")
 
-print(clean_filename)
+infofile = ('prime_ct_{}_{}'.format(start_date, end_date)).replace('-', "")
+
+print(infofile)
