@@ -3,7 +3,10 @@
 # Specify start_date and end_date in YYYY-MM-DD for a period <= 1 year
 # Smaller time selections will be generated significantly faster than large selections
 # Uses usaspending API endpoint: https://api.usaspending.gov/api/v2/bulk_download/awards/
-# Returns a status url, filename, and download url
+# 1) Sends post request to generate zip file
+# 2) Periodically checks status of zip file generation
+# 3) Once zip fine generation has finished: returns status_url, filename, and download_url
+# 5) Prints status_url, filename, and download_url
 
 
 import requests
@@ -68,7 +71,7 @@ def get_zip(url, request):
     return(status_url, filename, file_url)
 
 def download_check(session_object, status_url):
-    for attempt in range(10):
+    for attempt in range(15):
         download_url = session_object.get(status_url)
         if download_url.json()['status'] == 'finished':
             print('the file is ready to be processed, downloading')
