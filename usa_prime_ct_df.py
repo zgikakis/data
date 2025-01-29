@@ -75,7 +75,7 @@ def get_zip(url, request):
     return(status_url, filename, file_url)
 
 def download_check(session_object, status_url):
-    for attempt in range(10):
+    for attempt in range(15):
         download_url = session_object.get(status_url)
         if download_url.json()['status'] == 'finished':
             print('the file is ready to be processed, downloading')
