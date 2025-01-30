@@ -32,7 +32,7 @@ for index, row in file_df.iterrows():
                 globals()[df_name] = df
                 
                 # Print the head of the df
-                print(f"Head of DataFrame for year {year}:")
+                print(f"Head of df for year {year}:")
                 print(df.head())
     else:
         print(f"Failed to download the file for year {year}. Status code: {response.status_code}")
