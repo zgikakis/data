@@ -3,6 +3,9 @@ import requests
 import zipfile
 from io import BytesIO
 
+# Specify the file path of the fileinfo file 
+file_path = 'C:\\usa_api_fileinfo\\p_ct_2025_2025'
+
 # Specify which columns to keep
 columns_to_keep = [
     "contract_transaction_unique_key", "contract_award_unique_key", "award_id_piid",
@@ -20,9 +23,6 @@ columns_to_keep = [
     "naics_description", "dod_acquisition_program_code", "dod_acquisition_program_description",
     "usaspending_permalink", "last_modified_date"
 ]
-
-# Specify the file path
-file_path = 'C:\\usa_api_fileinfo\\p_ct_2025_2025'
 
 # Read the file info CSV into a df
 file_df = pd.read_csv(file_path)
