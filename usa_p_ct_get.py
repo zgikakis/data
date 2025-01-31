@@ -3,10 +3,10 @@ import requests
 import zipfile
 from io import BytesIO
 
-# Specify the file path of the fileinfo file 
-file_path = 'C:\\usa_api_fileinfo\\p_ct_2025_2025'
+# Specify the file path of the fileinfo file
+file_path = 'C:\\usa_api_fileinfo\\p_ct_2022_2023'
 
-# Specify which columns to keep
+# Specify columns to keep
 columns_to_keep = [
     "contract_transaction_unique_key", "contract_award_unique_key", "award_id_piid",
     "modification_number", "transaction_number", "parent_award_id_piid",
@@ -40,18 +40,27 @@ for index, row in file_df.iterrows():
     if response.status_code == 200:
         # Open the zip file
         with zipfile.ZipFile(BytesIO(response.content)) as zip_file:
-            # Extract the first file within the zip file
-            with zip_file.open(zip_file.namelist()[0]) as text_file:
-                # Read the pipe delimited text file into a df
-                df = pd.read_csv(text_file, delimiter='|')
+            # Create an empty df for the current year
+            df_year = pd.DataFrame()
 
-                # Keep only the specified columns
-                df = df[columns_to_keep]
+            # Loop through all files in the zip file
+            for file_name in zip_file.namelist():
+                # Open and read the text file
+                with zip_file.open(file_name) as text_file:
+                    # Read the pipe delimited text file into a temporary df
+                    temp_df = pd.read_csv(text_file, delimiter='|')
 
-                # Name the df based on the year it corresponds with
-                df_name = f'df_{year}'
-                globals()[df_name] = df
+                    # Keep only the specified columns
+                    temp_df = temp_df[columns_to_keep]
 
-                print(df.head())
+                    # Append the data to the year's df
+                    df_year = pd.concat([df_year, temp_df], ignore_index=True)
+
+            # Name the df based on the year it corresponds with
+            df_name = f'df_{year}'
+            globals()[df_name] = df_year
+
+            print(f"df for year {year} created with {len(df_year)} rows.")
+            print(df_year.head())
     else:
         print(f"Failed to download the file for year {year}. Status code: {response.status_code}")
